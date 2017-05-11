@@ -1,0 +1,10 @@
+.cell {
+  position: absolute;
+  border: 1px solid gray;
+}
+.cell-live {
+  background-color: red;
+}
+.cell-dead {
+  background-color: white;
+}

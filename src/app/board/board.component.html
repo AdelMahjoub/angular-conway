@@ -1,0 +1,13 @@
+<div 
+  [ngStyle]="boradStyleSize"
+  class="board">
+  <ng-container *ngFor="let array of board; let x = index">
+    <ng-container *ngFor="let value of array; let y = index">
+      <app-cell 
+        [cellValue]="value" 
+        [positionX]="x" 
+        [positionY]="y"
+        [size]="cellSize"></app-cell>
+    </ng-container>
+  </ng-container> 
+</div>

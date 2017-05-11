@@ -1,0 +1,19 @@
+<button 
+  type="button" 
+  (click)="onRandom()"
+  [disabled]="gameStarted">Random Board</button>
+
+<button 
+  type="button" 
+  (click)="onStart()"
+  [disabled]="gameStarted">Start</button>
+
+<button 
+  type="button" 
+  (click)="onStop()"
+  [disabled]="!gameStarted">Stop</button>
+
+<button 
+  type="button" 
+  (click)="onClear()"
+  [disabled]="gameStarted">Clear Board</button>
