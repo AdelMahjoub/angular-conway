@@ -1,13 +1,24 @@
-<div 
-  [ngStyle]="boradStyleSize"
-  class="board">
-  <ng-container *ngFor="let array of board; let x = index">
-    <ng-container *ngFor="let value of array; let y = index">
-      <app-cell 
-        [cellValue]="value" 
-        [positionX]="x" 
-        [positionY]="y"
-        [size]="cellSize"></app-cell>
-    </ng-container>
-  </ng-container> 
+<div class="board-container">
+  <span 
+    *ngFor="let array of board; let x = index"
+    class="coords"
+    [ngStyle]="{'width': cellSize + 'px', 'height': cellSize + 'px', 'top': -cellSize + 'px', 'left': x * cellSize + 'px', 'font-size': cellSize / 2 + 'px'}">
+    {{ x }}
+  </span>
+  <span 
+    *ngFor="let value of board[0]; let y = index"
+    class="coords"
+    [ngStyle]="{'width': cellSize + 'px', 'height': cellSize + 'px', 'top': y * cellSize + 'px', 'left': -cellSize + 'px', 'font-size': cellSize / 2 + 'px'}">{{ y }}</span>
+  <div 
+    [ngStyle]="boradStyleSize"
+    class="board">
+    <ng-container *ngFor="let array of board; let x = index">
+      <ng-container *ngFor="let value of array; let y = index">
+        <app-cell 
+          [positionX]="x" 
+          [positionY]="y"
+          [size]="cellSize"></app-cell>
+      </ng-container>
+    </ng-container> 
+  </div>
 </div>

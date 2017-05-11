@@ -1,3 +1,4 @@
+import { MatrixService } from './../../matrix.service';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CellComponent implements OnInit {
 
-  @Input() cellValue: number;
+  cellValue: number;
   @Input() positionX: number;
   @Input() positionY: number;
   @Input() size: number;
@@ -19,7 +20,7 @@ export class CellComponent implements OnInit {
     height: string;
   }
 
-  constructor() { }
+  constructor(private matrixService: MatrixService) { }
 
   ngOnInit() {
     if(!this.cellStyle) {
@@ -30,6 +31,14 @@ export class CellComponent implements OnInit {
         height: `${this.size}px`,
       }
     }
+    this.cellValue = this.matrixService.getMatrix()[this.positionX][this.positionY];
+    this.matrixService.matrixChanged.subscribe(
+      (changed: boolean) => {
+        if(changed) {
+          this.cellValue = this.matrixService.getMatrix()[this.positionX][this.positionY];
+        }
+      }
+    )
   }
 
 }

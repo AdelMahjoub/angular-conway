@@ -1,3 +1,13 @@
+.board-container {
+  position: relative;
+}
 .board {
   position: relative;
+  border-bottom: 1px solid gray;
+  border-right: 1px solid gray;
+}
+.coords{
+  position: absolute;
+  display: block;
+  text-align: center;
 }

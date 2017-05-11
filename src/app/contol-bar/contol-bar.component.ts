@@ -42,4 +42,14 @@ export class ContolBarComponent implements OnInit, OnDestroy {
     this.gameService.gameRunStatus.next(false);
   }
 
+  onSpeedUp() {
+    this.gameService.sppedUp();
+    this.gameService.gameSpeedChanged.next(this.gameService.throttle);
+  }
+
+  onSpeedDown() {
+    this.gameService.speedDown();
+    this.gameService.gameSpeedChanged.next(this.gameService.throttle);
+  }
+
 }

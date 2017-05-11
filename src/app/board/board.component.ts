@@ -13,9 +13,9 @@ export class BoardComponent implements OnInit, OnDestroy {
   width: number;
   height: number;
   cellSize: number;
-  board: number[][];
+  board = [];
 
-  boardHistory = [];
+  throttle: number;
 
   boradStyleSize: {
     width: string;
@@ -26,23 +26,29 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   gameSubscription: Subscription;
 
+  speedSubscription: Subscription;
+
   constructor(
     private matrixService: MatrixService,
     private gameService: GameService) { }
 
   ngOnInit() {
-    
-    if(!this.width && !this.height && !this.cellSize) {
-      this.width = this.matrixService.getWidth();
-      this.height = this.matrixService.getHeight();
-      this.cellSize = this.matrixService.getCellSize();
-      this.boradStyleSize = {
-        width: `${this.width * this.cellSize}px`,
-        height: `${this.height * this.cellSize}px`,
-      }
+
+    this.width = this.matrixService.getWidth();
+    this.height = this.matrixService.getHeight();
+    this.cellSize = this.matrixService.getCellSize();
+    this.throttle = this.gameService.throttle;
+    this.boradStyleSize = {
+      width: `${this.width * this.cellSize + 1}px`,
+      height: `${this.height * this.cellSize + 1}px`,
     }
 
-    if(!this.board) this.board = this.matrixService.getMatrix();
+    for(let x = 0; x < this.width; x++) {
+      this.board[x] = [];
+      for(let y = 0; y < this.height; y++) {
+        this.board[x][y] = 0;
+      }
+    }
       
     this.gameSubscription = this.gameService.gameActions.subscribe(
       (action: string) => {
@@ -54,30 +60,33 @@ export class BoardComponent implements OnInit, OnDestroy {
             if(this.timerID) this.stopAnimation();
             break;
           case 'CLEAR':
-            if(!this.timerID) this.board = this.matrixService.emptyMatrix();
+            if(!this.timerID) {
+              this.matrixService.emptyMatrix();
+              this.matrixService.matrixChanged.next(true);
+            };
             break;
           case 'RANDOM':
-            if(!this.timerID) this.board = this.matrixService.randomMatrix();
+            if(!this.timerID) {
+              this.matrixService.randomMatrix();
+              this.matrixService.matrixChanged.next(true);
+            };
           default:
         }
       }
     )
-  } 
+
+    this.speedSubscription = this.gameService.gameSpeedChanged.subscribe(
+      (throttle: number) => {
+        this.throttle = throttle;
+      }
+    )
+  }
 
   ngOnDestroy() {
     this.gameSubscription.unsubscribe();
-    if(this.timerID) {
-      clearInterval(this.timerID);
-      this.timerID = null;
-    }
+    this.speedSubscription.unsubscribe();
   }
 
-  /**
-   * Return the sum of all adjacent cells of at a given position (posX, posY)
-   * @param posX 
-   * @param posY 
-   * @param matrix 
-   */
   getNeighbours(posX: number, posY: number, matrix: number[][]): number {
     let neighbours = [];
     for(let x = posX - 1; x <= (posX + 1); x++) {
@@ -90,17 +99,15 @@ export class BoardComponent implements OnInit, OnDestroy {
     return neighbours.reduce((a, b) => a + b, 0);
   }
 
-  /**
-   * Apply Conway logic to all cells
-   */
   nextCycle(): void {
     let nextMatrix: number[][];
-    nextMatrix = this.matrixService.cloneMatrix(this.board);
+    let currentMatrix = this.matrixService.getMatrix()
+    nextMatrix = this.matrixService.cloneMatrix(currentMatrix);
 
     for(let x = 0; x < this.width; x++) {
       for(let y = 0; y < this.height; y++) {
-        let currentCell = this.board[x][y];
-        let cellFate = this.getNeighbours(x, y, this.board)
+        let currentCell = currentMatrix[x][y];
+        let cellFate = this.getNeighbours(x, y, currentMatrix)
         switch(currentCell) {
           case 1:
             if(cellFate < 2 || cellFate > 3) nextMatrix[x][y] = 0;
@@ -112,18 +119,24 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       }
     }
-    // this.boardHistory.push(this.matrixService.cloneMatrix(this.board));
-    this.board = this.matrixService.cloneMatrix(nextMatrix);
+    this.matrixService.updateMatrix(nextMatrix);
+    this.matrixService.matrixChanged.next(true);
   }
 
   animateBoard(): void {
-    this.timerID = setInterval(() => {
-      this.nextCycle();
-    }, 33)
+    this.timerID = requestAnimationFrame(() => {
+      this.animateBoard();
+    });
+    this.throttle--;
+    if(this.throttle <= 0) {
+       this.nextCycle();
+       this.throttle = this.gameService.throttle;
+    }
+   
   }
 
   stopAnimation(): void {
-    clearInterval(this.timerID);
+    cancelAnimationFrame(this.timerID);
     this.timerID = null;
   }
 

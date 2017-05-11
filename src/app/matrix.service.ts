@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
+import { Subject } from "rxjs/Subject";
 
 @Injectable()
 
 export class MatrixService {
 
   private cellSize = 16;
-  private height = 30;
-  private width = 30;
+  private height = 40;
+  private width = 40;
 
   private matrix = [];
 
+  matrixChanged = new Subject<boolean>();
+
   constructor() {
-    this.matrix = this.randomMatrix();
+    this.randomMatrix();
   }
 
   getWidth(): number {
@@ -27,29 +30,32 @@ export class MatrixService {
   }
 
   getMatrix(): number[][] {
-    return this.cloneMatrix(this.matrix);
+    return this.matrix;
   }
 
-  randomMatrix(): number[][] {
-    let matrix = [];
-    for(let x = 0; x < this.width; x++) {
-      matrix[x] = []
-      for(let y = 0; y < this.height; y++) {
-        matrix[x][y] = Math.round(Math.random()); 
-      }
-    }
-    return this.cloneMatrix(matrix);
+  getValue(x: number, y: number): number {
+    return this.matrix[x][y];
   }
 
-  emptyMatrix(): number[][] {
-    let matrix = [];
+  updateMatrix(matrix: number[][]) {
+    this.matrix = this.cloneMatrix(matrix);
+  }
+
+  randomMatrix(): void {
     for(let x = 0; x < this.width; x++) {
-      matrix[x] = []
+      this.matrix[x] = [];
       for(let y = 0; y < this.height; y++) {
-        matrix[x][y] = 0; 
+       this.matrix[x][y] = Math.round(Math.random()); 
       }
     }
-    return this.cloneMatrix(matrix);
+  }
+
+  emptyMatrix(): void {
+    for(let x = 0; x < this.width; x++) {
+      for(let y = 0; y < this.height; y++) {
+        this.matrix[x][y] = 0;
+      }
+    }
   }
 
   cloneMatrix(matrix: number[][]): number[][] {
