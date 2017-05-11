@@ -25,20 +25,20 @@ export class ContolBarComponent implements OnInit, OnDestroy {
   }
 
   onRandom() {
-    this.gameService.gameSubject.next('RANDOM');
+    this.gameService.gameActions.next('RANDOM');
   }
 
   onStart() {
-    this.gameService.gameSubject.next('START');
+    this.gameService.gameActions.next('START');
     this.gameService.gameRunStatus.next(true);
   }
 
   onClear() {
-    this.gameService.gameSubject.next('CLEAR');
+    this.gameService.gameActions.next('CLEAR');
   }
 
   onStop() {
-    this.gameService.gameSubject.next('STOP');
+    this.gameService.gameActions.next('STOP');
     this.gameService.gameRunStatus.next(false);
   }
 

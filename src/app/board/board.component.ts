@@ -44,7 +44,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     if(!this.board) this.board = this.matrixService.getMatrix();
       
-    this.gameSubscription = this.gameService.gameSubject.subscribe(
+    this.gameSubscription = this.gameService.gameActions.subscribe(
       (action: string) => {
         switch(action) {
           case 'START':

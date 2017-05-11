@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GameService {
 
-  gameSubject = new Subject<string>();
+  gameActions = new Subject<string>();
 
   gameRunStatus = new Subject<boolean>();
 
