@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GameService {
 
-  throttle = 2;
+  throttle = 3;
 
   gameActions = new Subject<string>();
 

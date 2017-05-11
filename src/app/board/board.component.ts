@@ -38,6 +38,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.height = this.matrixService.getHeight();
     this.cellSize = this.matrixService.getCellSize();
     this.throttle = this.gameService.throttle;
+    
     this.boradStyleSize = {
       width: `${this.width * this.cellSize + 1}px`,
       height: `${this.height * this.cellSize + 1}px`,

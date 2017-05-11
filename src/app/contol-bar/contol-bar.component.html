@@ -1,33 +1,52 @@
-<button 
-  type="button" 
-  class="btn btn-default"
-  (click)="onRandom()"
-  [disabled]="gameStarted">Random Board</button>
+<div class="btn-group btn-group-sm">
+  <button 
+    type="button" 
+    class="btn btn-default"
+    (click)="onRandom()"
+    [disabled]="gameStarted">random</button>
+  <button 
+    type="button" 
+    class="btn btn-warning"
+    (click)="onClear()"
+    [disabled]="gameStarted">clear</button>
+</div>
 
-<button 
+<div class="btn-group btn-group-sm">
+  <button 
   type="button" 
   class="btn btn-primary"
   (click)="onStart()"
-  [disabled]="gameStarted">Start</button>
-
-<button 
-  type="button" 
-  class="btn btn-danger"
-  (click)="onStop()"
-  [disabled]="!gameStarted">Stop</button>
-
-<button 
-  type="button" 
-  class="btn btn-warning"
-  (click)="onClear()"
-  [disabled]="gameStarted">Clear Board</button>
+  [disabled]="gameStarted">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
 
   <button 
-  type="button" 
-  class="btn btn-info"
-  (click)="onSpeedUp()">Up</button>
+    type="button" 
+    class="btn btn-danger"
+    (click)="onStop()"
+    [disabled]="!gameStarted">
+      <span class="glyphicon glyphicon-stop"></span>
+    </button>
+</div>
 
+<div class="btn-group btn-group-sm">
+  <button class="btn btn-default" disabled style="cursor: default">Speed</button>
   <button 
-  type="button" 
-  class="btn btn-info"
-  (click)="onSpeedDown()">Down</button>
+    type="button" 
+    class="btn btn-info"
+    (click)="onSpeedUp()"
+    [disabled]="!gameStarted">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+
+    <button 
+    type="button" 
+    class="btn btn-info"
+    (click)="onSpeedDown()"
+    [disabled]="!gameStarted">
+      <span class="glyphicon glyphicon-minus"></span>
+    </button>
+</div>
+
+
+  

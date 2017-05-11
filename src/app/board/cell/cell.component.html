@@ -2,4 +2,5 @@
   class="cell"
   [ngClass]="{'cell-live': cellValue === 1, 'cell-dead': cellValue === 0}"
   [ngStyle]="cellStyle"
+  (click)="onToggle()"
 ></div>

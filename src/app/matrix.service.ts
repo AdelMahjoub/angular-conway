@@ -6,7 +6,7 @@ import { Subject } from "rxjs/Subject";
 export class MatrixService {
 
   private cellSize = 16;
-  private height = 40;
+  private height = 30;
   private width = 40;
 
   private matrix = [];
@@ -35,6 +35,10 @@ export class MatrixService {
 
   getValue(x: number, y: number): number {
     return this.matrix[x][y];
+  }
+
+  toggleValue(x: number, y: number): void {
+    this.matrix[x][y] = Math.abs(this.matrix[x][y] - 1);
   }
 
   updateMatrix(matrix: number[][]) {
