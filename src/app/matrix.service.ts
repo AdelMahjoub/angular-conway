@@ -13,6 +13,10 @@ export class MatrixService {
 
   matrixChanged = new Subject<boolean>();
 
+  liveCellsCount = new Subject<number>();
+
+  cyclesCount = new Subject<number>();
+
   constructor() {
     this.randomMatrix();
   }
@@ -60,6 +64,12 @@ export class MatrixService {
         this.matrix[x][y] = 0;
       }
     }
+  }
+
+  countLiveCells(): number {
+    let flattenedMatrix = [];
+    flattenedMatrix = this.matrix.reduce((acc, cur) => acc.concat(cur), []);
+    return flattenedMatrix.reduce((acc, cur) => acc + cur, 0);
   }
 
   cloneMatrix(matrix: number[][]): number[][] {

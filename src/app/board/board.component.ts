@@ -23,6 +23,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   timerID: any;
+  cycles = 0;
 
   gameSubscription: Subscription;
 
@@ -62,14 +63,20 @@ export class BoardComponent implements OnInit, OnDestroy {
             break;
           case 'CLEAR':
             if(!this.timerID) {
+              this.cycles = 0;
               this.matrixService.emptyMatrix();
               this.matrixService.matrixChanged.next(true);
+              this.matrixService.liveCellsCount.next(this.matrixService.countLiveCells());
+              this.matrixService.cyclesCount.next(this.cycles);
             };
             break;
           case 'RANDOM':
             if(!this.timerID) {
+              this.cycles = 0;
               this.matrixService.randomMatrix();
               this.matrixService.matrixChanged.next(true);
+              this.matrixService.liveCellsCount.next(this.matrixService.countLiveCells());
+              this.matrixService.cyclesCount.next(this.cycles);
             };
           default:
         }
@@ -81,6 +88,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.throttle = throttle;
       }
     )
+
+    this.matrixService.liveCellsCount.next(this.matrixService.countLiveCells());
   }
 
   ngOnDestroy() {
@@ -120,8 +129,20 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.matrixService.updateMatrix(nextMatrix);
-    this.matrixService.matrixChanged.next(true);
+    let newCycle = currentMatrix.toString() !== nextMatrix.toString();
+    if(newCycle) {
+      this.cycles++;
+      this.matrixService.updateMatrix(nextMatrix);
+      this.matrixService.matrixChanged.next(true);
+      this.matrixService.liveCellsCount.next(this.matrixService.countLiveCells());
+      this.matrixService.cyclesCount.next(this.cycles);
+    } else {
+      this.cycles = 0;
+      if(this.timerID) {
+        this.stopAnimation();
+        this.gameService.gameRunStatus.next(false);
+      }
+    }
   }
 
   animateBoard(): void {

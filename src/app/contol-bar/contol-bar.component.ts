@@ -1,3 +1,4 @@
+import { MatrixService } from './../matrix.service';
 import { GameService } from './../game.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
@@ -8,9 +9,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class ContolBarComponent implements OnInit, OnDestroy {
 
-  constructor(private gameService: GameService) { }
+  constructor(
+    private gameService: GameService) { }
 
   gameStarted = false;
+
+  liveCells: number;
 
   ngOnInit() {
     this.gameService.gameRunStatus.subscribe(

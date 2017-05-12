@@ -1,14 +1,17 @@
 <div class="board-container">
+  <!-- X axis ruler -->
   <span 
     *ngFor="let array of board; let x = index"
     class="coords"
     [ngStyle]="{'width': cellSize + 'px', 'height': cellSize + 'px', 'top': -cellSize + 'px', 'left': x * cellSize + 'px', 'font-size': cellSize / 2 + 'px'}">
     {{ x }}
   </span>
+  <!-- Y axis ruler -->
   <span 
     *ngFor="let value of board[0]; let y = index"
     class="coords"
     [ngStyle]="{'width': cellSize + 'px', 'height': cellSize + 'px', 'top': y * cellSize + 'px', 'left': -cellSize + 'px', 'font-size': cellSize / 2 + 'px'}">{{ y }}</span>
+  <!-- Game Board -->
   <div 
     [ngStyle]="boradStyleSize"
     class="board">
